@@ -1,7 +1,7 @@
 package jca.crypto.digest.api;
 
-import javax.crypto.SecretKey;
+import java.security.MessageDigest;
 
 public interface IHashGenerator {
-	public SecretKey generateSecretKey() ;
+	public MessageDigest generateMessageDigest() ;
 }

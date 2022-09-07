@@ -3,11 +3,13 @@ package jca.app;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,7 +64,8 @@ public class Runner implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 		Security.addProvider(new BouncyCastleProvider());
 		//symEncryptDecrypt() ;
-		asymEncryptDecrypt();
+		//asymEncryptDecrypt();
+		generateDigest();
 	}
 	
 	private void generateAsymmetricKeys() {
@@ -133,7 +136,14 @@ public class Runner implements ApplicationRunner {
 
 	
 	private void generateDigest() {
-		hashGenerator.generateSecretKey();
+		String input = "The symmetric-key block cipher plays an important role in data encryption. It means that the same key is used for both encryption and decryption. The Advanced Encryption Standard (AES) is a widely used symmetric-key encryption algorithm.";		
+		MessageDigest digest = hashGenerator.generateMessageDigest();
+		byte[] hashedContent = digest.digest(input.getBytes());
+		String hashedBase64Str = Base64.getEncoder().encodeToString(hashedContent);
+		System.out.println(hashedBase64Str);
+		hashedContent = digest.digest(input.getBytes());
+		String rehashedBase64Str = Base64.getEncoder().encodeToString(hashedContent);
+		Assert.isTrue(rehashedBase64Str.equals(hashedBase64Str),()->"Hashed value should be same");
 	}
 	
 	public  IvParameterSpec generateIv() {
