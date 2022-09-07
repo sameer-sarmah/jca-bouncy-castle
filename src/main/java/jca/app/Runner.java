@@ -1,5 +1,6 @@
 package jca.app;
 
+import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
@@ -9,6 +10,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.security.Signature;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +33,7 @@ import jca.crypto.KeyType;
 import jca.crypto.asymmetric.api.IKeyGenerator;
 import jca.crypto.asymmetric.decryption.AsymDecrypter;
 import jca.crypto.asymmetric.encryption.AsymEncrypter;
+import jca.crypto.asymmetric.signature.SignatureService;
 import jca.crypto.digest.api.IHashGenerator;
 import jca.crypto.symmetric.api.ISymKeyGenerator;
 import jca.crypto.symmetric.decryption.SymDecrypter;
@@ -59,24 +62,35 @@ public class Runner implements ApplicationRunner {
 	
 	@Autowired
 	private AsymDecrypter asymDecrypter;
+	
+	@Autowired
+	private SignatureService signatureService;
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		Security.addProvider(new BouncyCastleProvider());
 		//symEncryptDecrypt() ;
 		//asymEncryptDecrypt();
-		generateDigest();
+		//generateDigest();
+		signature();
 	}
 	
-	private void generateAsymmetricKeys() {
+	private void signature() throws GeneralSecurityException {
 		Optional<IKeyGenerator> generatorOptional = asymKeyGenerators.stream()
-				.filter(keyGenerator -> keyGenerator.getType().equals(KeyPairType.EC))
+				.filter(keyGenerator -> keyGenerator.getType().equals(KeyPairType.RSA))
 				.findAny();
 		if(generatorOptional.isPresent()) {
 			KeyPair keyPair = generatorOptional.get().generateKey();
+			PrivateKey privateKey = keyPair.getPrivate();
+			PublicKey publicKey = keyPair.getPublic();
+			String input = "RSA is an asymmetric cryptographic algorithm.";
+			String asymAlgorithm = "RSA/ECB/PKCS1Padding";
+			byte[]  signedContent = signatureService.generateSignature(privateKey, input.getBytes());
+			boolean isVerified = signatureService.verifySignature(publicKey, input.getBytes(), signedContent);
+			System.out.println("Is content verified="+isVerified);
 		}
 	}
-	
+		
 	private void asymEncryptDecrypt() {
 		Optional<IKeyGenerator> generatorOptional = asymKeyGenerators.stream()
 				.filter(keyGenerator -> keyGenerator.getType().equals(KeyPairType.RSA))
