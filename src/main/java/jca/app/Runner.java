@@ -31,6 +31,7 @@ import jca.crypto.KeyPairType;
 import jca.crypto.KeyType;
 import jca.crypto.asymmetric.api.IKeyPairGenerator;
 import jca.crypto.asymmetric.decryption.AsymDecrypter;
+import jca.crypto.asymmetric.encoding.EncoderService;
 import jca.crypto.asymmetric.encryption.AsymEncrypter;
 import jca.crypto.asymmetric.signature.SignatureService;
 import jca.crypto.asymmetric.wrapping.AsymKeyWrapper;
@@ -72,6 +73,9 @@ public class Runner implements ApplicationRunner {
 	
 	@Autowired
 	private AsymKeyWrapper asymKeyWrapper;
+	
+	@Autowired
+	private EncoderService encoderService;
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
@@ -81,7 +85,8 @@ public class Runner implements ApplicationRunner {
 		//generateDigest();
 		//signature();
 		//symKeyWrapper.wrapSymmetricKey();
-		asymKeyWrapper.wrapAsymmetricKey();
+		//asymKeyWrapper.wrapAsymmetricKey();
+		encoderService.loadKeystore();
 	}
 	
 	private void signature() throws GeneralSecurityException {
