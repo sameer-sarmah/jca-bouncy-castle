@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import jca.crypto.KeyType;
 import jca.crypto.symmetric.api.ISymKeyGenerator;
 
-@Component
+@Component("DesKeyGenerator")
 public class DesKeyGenerator  implements ISymKeyGenerator{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DesKeyGenerator.class);

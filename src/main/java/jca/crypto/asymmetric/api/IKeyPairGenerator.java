@@ -5,7 +5,7 @@ import java.security.KeyPair;
 import jca.crypto.KeyPairType;
 
 
-public interface IKeyGenerator {
+public interface IKeyPairGenerator {
 	KeyPair generateKey();
 	KeyPairType getType();
 }

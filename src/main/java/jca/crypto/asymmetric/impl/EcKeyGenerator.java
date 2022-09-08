@@ -15,12 +15,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import jca.crypto.KeyPairType;
-import jca.crypto.asymmetric.api.IKeyGenerator;
+import jca.crypto.asymmetric.api.IKeyPairGenerator;
 
 
 
 @Component
-public class EcKeyGenerator implements IKeyGenerator{
+public class EcKeyGenerator implements IKeyPairGenerator{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EcKeyGenerator.class);
 

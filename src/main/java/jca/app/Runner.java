@@ -10,7 +10,6 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
-import java.security.Signature;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -30,20 +29,22 @@ import org.springframework.util.Assert;
 
 import jca.crypto.KeyPairType;
 import jca.crypto.KeyType;
-import jca.crypto.asymmetric.api.IKeyGenerator;
+import jca.crypto.asymmetric.api.IKeyPairGenerator;
 import jca.crypto.asymmetric.decryption.AsymDecrypter;
 import jca.crypto.asymmetric.encryption.AsymEncrypter;
 import jca.crypto.asymmetric.signature.SignatureService;
+import jca.crypto.asymmetric.wrapping.AsymKeyWrapper;
 import jca.crypto.digest.api.IHashGenerator;
 import jca.crypto.symmetric.api.ISymKeyGenerator;
 import jca.crypto.symmetric.decryption.SymDecrypter;
 import jca.crypto.symmetric.encryption.SymEncrypter;
+import jca.crypto.symmetric.wrapping.SymKeyWrapper;
 
 @Component
 public class Runner implements ApplicationRunner {
 	
 	@Autowired
-	private List<IKeyGenerator> asymKeyGenerators;
+	private List<IKeyPairGenerator> asymKeyGenerators;
 	
 	@Autowired
 	private List<ISymKeyGenerator> symKeyGenerators;
@@ -65,6 +66,12 @@ public class Runner implements ApplicationRunner {
 	
 	@Autowired
 	private SignatureService signatureService;
+	
+	@Autowired
+	private SymKeyWrapper symKeyWrapper; 
+	
+	@Autowired
+	private AsymKeyWrapper asymKeyWrapper;
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
@@ -72,11 +79,13 @@ public class Runner implements ApplicationRunner {
 		//symEncryptDecrypt() ;
 		//asymEncryptDecrypt();
 		//generateDigest();
-		signature();
+		//signature();
+		//symKeyWrapper.wrapSymmetricKey();
+		asymKeyWrapper.wrapAsymmetricKey();
 	}
 	
 	private void signature() throws GeneralSecurityException {
-		Optional<IKeyGenerator> generatorOptional = asymKeyGenerators.stream()
+		Optional<IKeyPairGenerator> generatorOptional = asymKeyGenerators.stream()
 				.filter(keyGenerator -> keyGenerator.getType().equals(KeyPairType.RSA))
 				.findAny();
 		if(generatorOptional.isPresent()) {
@@ -92,7 +101,7 @@ public class Runner implements ApplicationRunner {
 	}
 		
 	private void asymEncryptDecrypt() {
-		Optional<IKeyGenerator> generatorOptional = asymKeyGenerators.stream()
+		Optional<IKeyPairGenerator> generatorOptional = asymKeyGenerators.stream()
 				.filter(keyGenerator -> keyGenerator.getType().equals(KeyPairType.RSA))
 				.findAny();
 		if(generatorOptional.isPresent()) {

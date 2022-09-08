@@ -10,12 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import jca.crypto.KeyPairType;
-import jca.crypto.asymmetric.api.IKeyGenerator;
+import jca.crypto.asymmetric.api.IKeyPairGenerator;
 import jca.util.TrustStoreUtil;
 
 
-@Component
-public class RsaKeyGenerator implements IKeyGenerator{
+@Component("RsaKeyGenerator")
+public class RsaKeyGenerator implements IKeyPairGenerator{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RsaKeyGenerator.class);
 
