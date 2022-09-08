@@ -36,7 +36,7 @@ public class CertificateService {
 	private IKeyPairGenerator rsaPairGenerator;
 
 	public void createCertificate() {
-		KeyPair rsaKeyPair = rsaPairGenerator.generateKey();
+		KeyPair rsaKeyPair = rsaPairGenerator.generateKeyPair();
 	}
 
 	public static X509Certificate makeV3Certificate(X509Certificate caCertificate, PrivateKey caPrivateKey,

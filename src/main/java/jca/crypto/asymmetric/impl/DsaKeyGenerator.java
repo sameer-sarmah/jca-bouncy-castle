@@ -13,26 +13,24 @@ import jca.crypto.KeyPairType;
 import jca.crypto.asymmetric.api.IKeyPairGenerator;
 import jca.util.TrustStoreUtil;
 
-
-@Component("RsaKeyGenerator")
-public class RsaKeyGenerator implements IKeyPairGenerator{
-	
+@Component("DsaKeyGenerator")
+public class DsaKeyGenerator implements IKeyPairGenerator{
 	private static final Logger LOGGER = LoggerFactory.getLogger(RsaKeyGenerator.class);
 
 	@Override
 	public KeyPair generateKeyPair() {
 		KeyPair keyPair;
 		try {
-			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA","BC");
+			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("DSA","BC");
 			keyPairGenerator.initialize(2048);
 			keyPair = keyPairGenerator.generateKeyPair();
-			//privateKey will be of type org.bouncycastle.jcajce.provider.asymmetric.rsa.BCRSAPrivateCrtKey
+			//privateKey will be of type org.bouncycastle.jcajce.provider.asymmetric.dsa.BCDSAPrivateCrtKey
 			PrivateKey privateKey = keyPair.getPrivate();
-			//publicKey will be of type  org.bouncycastle.jcajce.provider.asymmetric.rsa.BCRSAPublicKey
+			//publicKey will be of type  org.bouncycastle.jcajce.provider.asymmetric.dsa.BCDSAPublicKey
 			PublicKey publicKey = keyPair.getPublic();
 			TrustStoreUtil.analysePrivateKey(privateKey);
 			TrustStoreUtil.analysePublicKey(publicKey);
-			LOGGER.info("RSA Private key and Public key generated");
+			LOGGER.info("DSA Private key and Public key generated");
 		} catch (Exception ex) {
 			throw new IllegalStateException(ex);
 		}

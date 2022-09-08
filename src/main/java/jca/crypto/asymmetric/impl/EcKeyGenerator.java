@@ -25,7 +25,7 @@ public class EcKeyGenerator implements IKeyPairGenerator{
 	private static final Logger LOGGER = LoggerFactory.getLogger(EcKeyGenerator.class);
 
 	@Override
-	public KeyPair generateKey() {
+	public KeyPair generateKeyPair() {
 		EllipticCurve ellipticCurve = new EllipticCurve(
 				new ECFieldFp(
 						new BigInteger("115792089210356248762697446949407573530086143415290314195533631308867097853951")),

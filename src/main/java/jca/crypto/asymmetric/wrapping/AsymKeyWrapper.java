@@ -31,7 +31,7 @@ public class AsymKeyWrapper {
 
 	public void wrapAsymmetricKey() throws GeneralSecurityException {
 		SecretKey aesKey = aesKeyGenerators.generateSecretKey();
-		KeyPair rsaKeyPair = rsaPairGenerator.generateKey();
+		KeyPair rsaKeyPair = rsaPairGenerator.generateKeyPair();
 		PrivateKey privateKey = rsaKeyPair.getPrivate();
 		PublicKey publicKey = rsaKeyPair.getPublic();
 		String keyBase64Str = Base64.getEncoder().encodeToString(aesKey.getEncoded());

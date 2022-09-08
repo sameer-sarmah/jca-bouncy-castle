@@ -36,6 +36,7 @@ import jca.crypto.asymmetric.encryption.AsymEncrypter;
 import jca.crypto.asymmetric.signature.SignatureService;
 import jca.crypto.asymmetric.wrapping.AsymKeyWrapper;
 import jca.crypto.digest.api.IHashGenerator;
+import jca.crypto.pgp.PgpService;
 import jca.crypto.symmetric.api.ISymKeyGenerator;
 import jca.crypto.symmetric.decryption.SymDecrypter;
 import jca.crypto.symmetric.encryption.SymEncrypter;
@@ -76,6 +77,9 @@ public class Runner implements ApplicationRunner {
 	
 	@Autowired
 	private EncoderService encoderService;
+	
+	@Autowired
+	private PgpService pgpService;
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
@@ -86,7 +90,10 @@ public class Runner implements ApplicationRunner {
 		//signature();
 		//symKeyWrapper.wrapSymmetricKey();
 		//asymKeyWrapper.wrapAsymmetricKey();
-		encoderService.loadKeystore();
+		//encoderService.loadKeystore();
+		pgpService.generateKeyRing("PGP", "Qwerty@1234".toCharArray());
+		
+
 	}
 	
 	private void signature() throws GeneralSecurityException {
@@ -94,7 +101,7 @@ public class Runner implements ApplicationRunner {
 				.filter(keyGenerator -> keyGenerator.getType().equals(KeyPairType.RSA))
 				.findAny();
 		if(generatorOptional.isPresent()) {
-			KeyPair keyPair = generatorOptional.get().generateKey();
+			KeyPair keyPair = generatorOptional.get().generateKeyPair();
 			PrivateKey privateKey = keyPair.getPrivate();
 			PublicKey publicKey = keyPair.getPublic();
 			String input = "RSA is an asymmetric cryptographic algorithm.";
@@ -110,7 +117,7 @@ public class Runner implements ApplicationRunner {
 				.filter(keyGenerator -> keyGenerator.getType().equals(KeyPairType.RSA))
 				.findAny();
 		if(generatorOptional.isPresent()) {
-			KeyPair keyPair = generatorOptional.get().generateKey();
+			KeyPair keyPair = generatorOptional.get().generateKeyPair();
 			PrivateKey privateKey = keyPair.getPrivate();
 			PublicKey publicKey = keyPair.getPublic();
 			IvParameterSpec iv = generateIv();

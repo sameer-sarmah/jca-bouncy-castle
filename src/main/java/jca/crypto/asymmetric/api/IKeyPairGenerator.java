@@ -6,6 +6,6 @@ import jca.crypto.KeyPairType;
 
 
 public interface IKeyPairGenerator {
-	KeyPair generateKey();
+	KeyPair generateKeyPair();
 	KeyPairType getType();
 }
